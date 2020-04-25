@@ -2,11 +2,11 @@
 Fetch covid19 data from worldometers.
 
 # About Output
-Script create 1 csv file and 1 data folder.
+Script create data folder which contain-
 1. csv file - List of countries and its url.
-2. data folder - Contain csv file for each country.
-                 Each csv has file date, daily cases, total cases, daily deaths, total deaths, active cases.
-                 Note- For some countries, some fields are not availabe.
+2. date named folder - Contain csv file for each country.
+                       Each csv has file date, daily cases, total cases, daily deaths, total deaths, active cases.
+                       Note- For some countries, some fields are not availabe.
                  
 # Steps to run script
 1. Create a folder name with name 'data'.
