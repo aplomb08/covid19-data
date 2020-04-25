@@ -67,8 +67,9 @@ def clean_data(res, info_label):
     # find the right sciprt tag
     data = False
     for i, r in enumerate(res):
-        if res[i].get_text().find(info_label) != -1:
-            data = res[i].get_text().split("\n")
+        r = str(r)
+        if r.find(info_label) != -1:
+            data = r.split("\n")
             # print(i)
             break
     
