@@ -5,8 +5,6 @@ Created on Sat Apr 25 11:42:12 2020
 @author: aplomb08
 """
 
-
-# Create your views here.
 import requests
 import re
 import os
@@ -84,7 +82,10 @@ def clean_data(res, info_label):
             date_range = [t.strip('\"') for t in date_range]
             # print(i)
         elif d.find('series') != -1:
-            data_range = data[i+4]
+            if data[i+4].find('data') != -1:
+                data_range = data[i+4]
+            elif data[i+5].find('data') != -1:
+                data_range = data[i+5]
             data_range = re.search(r"(?<=\[).*?(?=\])", data_range).group(0).split(",")
             data_range = [int(t) if t != 'null' else 0 for t in data_range]
             # print(i)
@@ -122,6 +123,7 @@ def clean_data(res, info_label):
 # 
 # df_country_list = get_country_list()
 # df_country_list.to_csv(os.path.join(datapath, 'country_list.csv'))
+# =============================================================================
 
 df_country_list = pd.read_csv(os.path.join(datapath, 'country_list.csv'))[['country','link']]
 
@@ -141,6 +143,8 @@ for i, row in df_country_list.iterrows():
     
     c_name = row['country']
     link = row['link']
+    
+    # if data already collected for specific city, do not collect again
     if c_name in filename:
         print(i, c_name, ":)")
         continue
@@ -180,14 +184,17 @@ for i, row in df_country_list.iterrows():
     date_range, data_active = clean_data(res, 'Active Cases')
     if date_range != False:
         df['Active Cases'] = data_active
-    
+        
+    # checking if data collected for all paramter or not
     if not(date_range and data_daily_cases and data_daily_deaths and data_active):
         country_lst_issue.append([i,c_name,link])
-        print(" :( :( :( ",end="")
+        # na - not available
+        print(" [parameter(s) na] ",end="")
     
     df.to_csv(os.path.join(datapath, folder_name, c_name+'.csv'))
     print(".",end="")
     
     print()
+    # break
 
 print("\n\nTime taken: {} seconds".format(round(time.time()-start, 2)))
